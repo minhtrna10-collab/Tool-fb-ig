@@ -11,8 +11,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   background: #0a0e17; color: #e2e8f0; min-height: 100vh; padding-bottom: 40px; overflow-x: hidden; }
 .topbar { display: flex; align-items: center; gap: 12px; padding: 14px 16px;
   background: #0f1521; border-bottom: 1px solid #1a2332; position: sticky; top: 0; z-index: 100; }
-.topbar .back { font-size: 22px; cursor: pointer; }
-.topbar .title { flex: 1; font-size: 16px; font-weight: 700; color: #fff; }
+.topbar .back { font-size: 24px; cursor: pointer; color: #f5a623; padding: 0 8px;
+  transition: 0.2s; user-select: none; }
+.topbar .back:hover { transform: scale(1.2); }
+.topbar .back:active { transform: scale(0.9); }
+.topbar .title { flex: 1; font-size: 16px; font-weight: 700; color: #fff;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .topbar .menu { font-size: 20px; cursor: pointer; }
 .app-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; flex-wrap: wrap; }
 .app-name { font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
@@ -112,14 +116,19 @@ th { background: #0a0e17; color: #f5a623; font-weight: 700; font-size: 11px; }
   cursor: pointer; }
 .proxy-toggle input[type="checkbox"] { width: auto; accent-color: #10b981; }
 .proxy-toggle.on { border-color: #10b981; background: #052e1f; color: #10b981; }
+.farm-acc-row { display: grid; grid-template-columns: 40px 1fr; gap: 8px;
+  padding: 8px; background: #131a26; border: 1px solid #1f2a3d;
+  border-radius: 8px; margin-bottom: 6px; align-items: start; }
+.farm-acc-row input[type="checkbox"] { width: auto; accent-color: #10b981;
+  margin-top: 12px; }
 @media (min-width: 768px) { body { max-width: 500px; margin: 0 auto; } }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <span class="back">‹</span>
-  <span class="title">NP09V3 - Multi Tool</span>
+  <span class="back" onclick="goBack()" title="Quay lại">‹</span>
+  <span class="title" id="topbar-title">NP09V3 - Multi Tool</span>
   <span class="menu">⋯</span>
 </div>
 
@@ -132,9 +141,11 @@ th { background: #0a0e17; color: #f5a623; font-weight: 700; font-size: 11px; }
 
 <div class="menu-row">
   <button class="menu-btn" onclick="openTab('home')">🏠 Home</button>
+  <button class="menu-btn" onclick="openTab('accounts')">👤 Tài khoản</button>
+  <button class="menu-btn" onclick="openTab('twofa')">🔐 2FA</button>
   <button class="menu-btn" onclick="openTab('proxyctrl')">🎛️ Proxy</button>
-  <button class="menu-btn" onclick="openTab('logincheck')">🔐 Check Cookie</button>
   <button class="menu-btn" onclick="openTab('farm')">🌱 Nuôi Acc</button>
+  <button class="menu-btn" onclick="openTab('logincheck')">🔐 Check Cookie</button>
   <button class="menu-btn" onclick="openTab('regpagepr5')">📄 Reg Page PR5</button>
   <button class="menu-btn" onclick="openTab('chuyenpage')">📄 Chuyển Page</button>
   <button class="menu-btn" onclick="openTab('instagram')">📷 Reg IG</button>
@@ -164,12 +175,14 @@ th { background: #0a0e17; color: #f5a623; font-weight: 700; font-size: 11px; }
   <div class="main-panel">
     <div class="btn-grid">
       <button class="big-btn btn-gold btn-full" onclick="openTab('proxyctrl')">🎛️ QUẢN LÝ PROXY</button>
+      <button class="big-btn btn-purple btn-full" onclick="openTab('accounts')">👤 QUẢN LÝ TÀI KHOẢN FB/IG</button>
+      <button class="big-btn btn-cyan btn-full" onclick="openTab('twofa')">🔐 SINH MÃ 2FA</button>
+      <button class="big-btn btn-teal" onclick="openTab('farm')">🌱 NUÔI ACC</button>
+      <button class="big-btn btn-pink" onclick="openTab('logincheck')">🔐 CHECK COOKIE</button>
       <button class="big-btn btn-blue" onclick="openTab('chuyenpage')">📄 CHUYỂN PAGE</button>
-      <button class="big-btn btn-purple" onclick="openTab('instagram')">📷 REG INSTAGRAM</button>
-      <button class="big-btn btn-cyan" onclick="openTab('regfb')">📘 REG FACEBOOK</button>
+      <button class="big-btn btn-purple" onclick="openTab('instagram')">📷 REG IG</button>
+      <button class="big-btn btn-cyan" onclick="openTab('regfb')">📘 REG FB</button>
       <button class="big-btn btn-teal" onclick="openTab('regpagepr5')">📄 REG PAGE PR5</button>
-      <button class="big-btn btn-pink btn-full" onclick="openTab('logincheck')">🔐 CHECK COOKIE LIVE/DIE</button>
-      <button class="big-btn btn-gold btn-full" onclick="openTab('farm')">🌱 NUÔI TÀI KHOẢN</button>
       <button class="big-btn btn-teal btn-full" onclick="openTab('fbapi')">⚡ FACEBOOK API TOOL</button>
       <button class="big-btn btn-cyan btn-full" onclick="openTab('proxy')">🌐 PROXY GENERATOR</button>
       <button class="big-btn btn-blue btn-full" onclick="openTab('gettoken')">🔑 GET TOKEN / COOKIE</button>
@@ -179,19 +192,93 @@ th { background: #0a0e17; color: #f5a623; font-weight: 700; font-size: 11px; }
   <div class="card">
     <h3>📋 Hướng dẫn nhanh</h3>
     <p style="color:#8492a6; font-size:12px; line-height:1.7;">
-      <b>Bước 1:</b> Vào 🎛️ <b>Proxy</b> → paste danh sách proxy → Set<br>
-      <b>Bước 2:</b> Vào chức năng → bật checkbox <b>🌐 Dùng Proxy</b><br>
-      <b>Bước 3:</b> Chạy → tool tự xoay proxy mỗi session
+      <b>Bước 1:</b> 🎛️ <b>Proxy</b> → paste proxy → Set<br>
+      <b>Bước 2:</b> 👤 <b>Tài khoản</b> → thêm cookie FB/IG<br>
+      <b>Bước 3:</b> 🌱 <b>Nuôi Acc</b> → chọn acc cần nuôi → bật Proxy → Chạy<br>
+      <b>Bước 4:</b> 🔐 <b>2FA</b> → nhập secret → sinh mã đăng nhập
     </p>
   </div>
 </div>
 
-<!-- PROXY CONTROL -->
+<!-- ═══ QUẢN LÝ TÀI KHOẢN ═══ -->
+<div class="panel" id="panel-accounts">
+  <div class="card">
+    <h3>➕ Thêm tài khoản mới</h3>
+    <div class="form-group">
+      <label>Nền tảng</label>
+      <select id="acc-platform">
+        <option value="facebook">📘 Facebook</option>
+        <option value="instagram">📷 Instagram</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Cookie</label>
+      <textarea id="acc-cookie" style="min-height:100px;"
+        placeholder="c_user=123;xs=abc;datr=xyz;fr=..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Proxy (tùy chọn)</label>
+      <input type="text" id="acc-proxy" placeholder="ip:port hoặc user:pass@ip:port">
+    </div>
+    <div class="form-group">
+      <label>Secret 2FA (tùy chọn — để sinh mã đăng nhập)</label>
+      <input type="text" id="acc-secret" placeholder="JBSWY3DPEHPK3PXP">
+    </div>
+    <div class="form-group">
+      <label>Ghi chú</label>
+      <input type="text" id="acc-note" placeholder="VD: Acc chính, Acc phụ...">
+    </div>
+    <button class="btn btn-green-solid" onclick="addAccount()" id="acc-add-btn">➕ Thêm tài khoản</button>
+  </div>
+
+  <div class="card">
+    <h3>📋 Danh sách tài khoản (<span id="acc-count">0</span>)</h3>
+    <div class="btn-grid" style="margin-bottom:10px;">
+      <button class="big-btn btn-cyan" onclick="loadAccounts()">🔄 Tải lại</button>
+      <button class="big-btn btn-gold" onclick="checkAllAccounts()">🔍 Check tất cả</button>
+    </div>
+    <div id="acc-list">Đang tải...</div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Log</h3>
+    <div class="log-box" id="acc-log" style="height:200px;"></div>
+  </div>
+</div>
+
+<!-- ═══ SINH 2FA ═══ -->
+<div class="panel" id="panel-twofa">
+  <div class="card">
+    <h3>🔐 Sinh mã 2FA (TOTP)</h3>
+    <p style="color:#8492a6; font-size:11.5px; margin-bottom:10px;">
+      Nhập secret key (base32 — dạng <b>JBSWY3DPEHPK3PXP</b>) để sinh mã 6 số đổi mỗi 30 giây.
+    </p>
+    <div class="form-group">
+      <label>Secret Key</label>
+      <input type="text" id="tfa-secret" placeholder="JBSWY3DPEHPK3PXP">
+    </div>
+    <button class="btn btn-green-solid" onclick="gen2FA()">🔐 Sinh mã</button>
+    <div id="tfa-result" style="margin-top:14px; text-align:center;">
+      <div id="tfa-code" style="font-size:42px; font-weight:900; color:#10b981;
+        font-family:'Consolas',monospace; letter-spacing:8px;">------</div>
+      <div id="tfa-time" style="font-size:12px; color:#8492a6; margin-top:8px;"></div>
+      <button class="btn btn-cyan-solid" onclick="copy2FA()" style="margin-top:10px;">📋 Copy mã</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>⚡ Sinh nhanh cho tất cả acc đã lưu</h3>
+    <button class="btn btn-gold-solid" onclick="genAll2FA()">⚡ Sinh tất cả</button>
+    <div id="tfa-list" style="margin-top:14px;"></div>
+  </div>
+</div>
+
+<!-- ═══ PROXY CONTROL ═══ -->
 <div class="panel" id="panel-proxyctrl">
   <div class="card">
     <h3>🎛️ Cấu hình Proxy toàn cục</h3>
     <p style="color:#8492a6; font-size:11.5px; margin-bottom:10px;">
-      Sau khi Set, tool sẽ <b>tự động gắn proxy</b> khi bạn bật "Dùng Proxy". Mỗi session 1 proxy khác nhau.
+      Sau khi Set, tool sẽ <b>tự động gắn proxy</b> khi bạn bật "Dùng Proxy".
     </p>
     <div class="form-group">
       <label>Danh sách Proxy (mỗi dòng 1 proxy)</label>
@@ -214,30 +301,86 @@ socks5://192.168.1.3:1080"></textarea>
     <h3>🧪 Test 1 proxy</h3>
     <div class="form-group">
       <label>Proxy cần test</label>
-      <input type="text" id="pc-test-proxy" placeholder="ip:port hoặc user:pass@ip:port">
+      <input type="text" id="pc-test-proxy" placeholder="ip:port">
     </div>
     <button class="btn btn-cyan-solid" onclick="testOneProxy()">🧪 Test</button>
     <div id="pc-test-result" class="result-box"></div>
   </div>
 </div>
 
-<!-- PROXY GEN -->
-<div class="panel" id="panel-proxy">
+<!-- ═══ NUÔI ACC (ĐA LUỒNG) ═══ -->
+<div class="panel" id="panel-farm">
   <div class="card">
-    <h3>🌐 Proxy Generator</h3>
+    <h3>🌱 Nuôi tài khoản (Đa luồng)</h3>
     <div class="form-group">
-      <label>Số lượng</label>
-      <input type="number" id="px-limit" value="500" min="1" max="5000">
+      <label>Nền tảng</label>
+      <select id="fm-platform" onchange="loadFarmAccounts()">
+        <option value="facebook">📘 Facebook</option>
+        <option value="instagram">📷 Instagram</option>
+      </select>
     </div>
+    <div class="form-group">
+      <label>Chọn acc từ danh sách (tick để nuôi)</label>
+      <div id="fm-acc-list" style="max-height:300px; overflow-y:auto;
+        padding:8px; background:#05080f; border-radius:8px;
+        border:1px solid #1f2a3d;">
+        <span style="color:#8492a6;font-size:12px;">Bấm Tải để chọn acc...</span>
+      </div>
+      <button class="btn btn-cyan-solid" onclick="loadFarmAccounts()"
+        style="margin-top:8px; font-size:11px; padding:6px 12px;">
+        🔄 Tải danh sách acc
+      </button>
+    </div>
+
+    <div class="form-group">
+      <label>Hoặc paste cookie thủ công (nếu không chọn từ list — mỗi dòng 1 cookie)</label>
+      <textarea id="fm-cookie-manual" style="min-height:80px;"
+        placeholder="c_user=123;xs=abc;..."></textarea>
+    </div>
+
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Thời gian nuôi (phút)</label>
+        <input type="number" id="fm-duration" value="5" min="1" max="120">
+      </div>
+      <div class="form-group">
+        <label>Hành động/phút</label>
+        <input type="number" id="fm-rate" value="3" min="1" max="10">
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Delay min (giây)</label>
+        <input type="number" id="fm-delay-min" value="5" min="1" max="300">
+      </div>
+      <div class="form-group">
+        <label>Delay max (giây)</label>
+        <input type="number" id="fm-delay-max" value="15" min="1" max="300">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Số luồng đồng thời (max 10 cho Railway free)</label>
+      <input type="number" id="fm-workers" value="5" min="1" max="10">
+    </div>
+
+    <label class="proxy-toggle" id="fm-proxy-toggle-label">
+      <input type="checkbox" id="fm-use-proxy" onchange="toggleProxyUI('fm')">
+      🌐 Dùng Proxy toàn cục (nếu không chọn proxy riêng)
+    </label>
+
     <div class="btn-grid">
-      <button class="big-btn btn-cyan" onclick="fetchProxies()">🔍 Lấy Proxy</button>
-      <button class="big-btn btn-gold" onclick="copyProxies()">📋 Copy all</button>
+      <button class="big-btn btn-green-outline" onclick="startFarm()">▶️ Bắt đầu nuôi</button>
+      <button class="big-btn btn-red-outline" onclick="stopAll()">⏹ Dừng</button>
     </div>
-    <div class="btn-grid" style="margin-top:8px;">
-      <button class="big-btn btn-green-outline btn-full" onclick="sendToProxyCtrl()">📤 Gửi sang Proxy Manager</button>
+    <div style="margin-top:10px;">
+      <span class="status-badge status-idle" id="fm-status">💤 Chờ</span>
     </div>
-    <div id="px-status" style="margin-top:10px;font-size:12px;color:#8492a6;"></div>
-    <div id="px-table" style="max-height: 400px; overflow-y: auto;"></div>
+  </div>
+  <div class="card">
+    <h3>📋 Log realtime</h3>
+    <div class="log-box" id="fm-log"></div>
   </div>
 </div>
 
@@ -259,7 +402,7 @@ socks5://192.168.1.3:1080"></textarea>
     </div>
     <label class="proxy-toggle" id="lc-proxy-toggle-label">
       <input type="checkbox" id="lc-use-proxy" onchange="toggleProxyUI('lc')">
-      🌐 Dùng Proxy (xoay mỗi cookie)
+      🌐 Dùng Proxy
     </label>
     <div class="btn-grid">
       <button class="big-btn btn-green-outline" onclick="startCookieCheck()">▶️ Check</button>
@@ -277,49 +420,54 @@ socks5://192.168.1.3:1080"></textarea>
     <h3>📊 Kết quả</h3>
     <div id="lc-result" class="result-box"></div>
   </div>
-</div>
-
-<!-- NUÔI ACC -->
-<div class="panel" id="panel-farm">
+</div><!-- REG PAGE PR5 -->
+<div class="panel" id="panel-regpagepr5">
   <div class="card">
-    <h3>🌱 Nuôi tài khoản (Warm-up)</h3>
+    <h3>📄 Auto Reg Page PR5 (Profile Plus)</h3>
+    <p style="color:#8492a6; font-size:11.5px; margin-bottom:10px;">
+      Tạo Page chất lượng cao: Tạo Page → Kích hoạt Profile Plus → Set Category → Warm-up.
+    </p>
     <div class="form-group">
-      <label>Nền tảng</label>
-      <select id="fm-platform">
-        <option value="facebook">📘 Facebook</option>
-        <option value="instagram">📷 Instagram</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Cookie tài khoản cần nuôi</label>
-      <textarea id="fm-cookie" style="min-height:100px;"
-        placeholder="c_user=123;xs=abc;datr=xyz;fr=..."></textarea>
+      <label>User Access Token</label>
+      <textarea id="pr5-token" placeholder="Dán token có quyền tạo Page..."></textarea>
     </div>
     <div class="grid-2">
       <div class="form-group">
-        <label>Thời gian (phút)</label>
-        <input type="number" id="fm-duration" value="5" min="1" max="120">
+        <label>Số lượng Page</label>
+        <input type="number" id="pr5-count" value="1" min="1" max="20">
       </div>
       <div class="form-group">
-        <label>Hành động/phút</label>
-        <input type="number" id="fm-rate" value="3" min="1" max="10">
+        <label>Danh mục</label>
+        <select id="pr5-category">
+          <option value="Cá nhân">Cá nhân</option>
+          <option value="Công ty">Công ty</option>
+          <option value="Cửa hàng">Cửa hàng</option>
+          <option value="Nhà hàng">Nhà hàng</option>
+          <option value="Thương hiệu">Thương hiệu</option>
+          <option value="Blog">Blog</option>
+          <option value="Giải trí">Giải trí</option>
+        </select>
       </div>
     </div>
-    <label class="proxy-toggle" id="fm-proxy-toggle-label">
-      <input type="checkbox" id="fm-use-proxy" onchange="toggleProxyUI('fm')">
+    <div class="form-group">
+      <label>Tên Page (mỗi dòng 1 tên, để trống = random)</label>
+      <textarea id="pr5-names" style="min-height:80px;"
+        placeholder="Shop Quần Áo ABC
+Cà Phê Sài Gòn"></textarea>
+    </div>
+    <label class="proxy-toggle" id="pr5-proxy-toggle-label">
+      <input type="checkbox" id="pr5-use-proxy" onchange="toggleProxyUI('pr5')">
       🌐 Dùng Proxy
     </label>
     <div class="btn-grid">
-      <button class="big-btn btn-green-outline" onclick="startFarm()">▶️ Bắt đầu nuôi</button>
+      <button class="big-btn btn-green-outline" onclick="startRegPagePR5()">▶️ Bắt đầu</button>
       <button class="big-btn btn-red-outline" onclick="stopAll()">⏹ Dừng</button>
     </div>
-    <div style="margin-top:10px;">
-      <span class="status-badge status-idle" id="fm-status">💤 Chờ</span>
-    </div>
+    <div style="margin-top:10px;"><span class="status-badge status-idle" id="pr5-status">💤 Chờ</span></div>
   </div>
   <div class="card">
     <h3>📋 Log realtime</h3>
-    <div class="log-box" id="fm-log"></div>
+    <div class="log-box" id="pr5-log"></div>
   </div>
 </div>
 
@@ -383,7 +531,7 @@ socks5://192.168.1.3:1080"></textarea>
     </div>
     <label class="proxy-toggle" id="ig-proxy-toggle-label">
       <input type="checkbox" id="ig-use-proxy" onchange="toggleProxyUI('ig')">
-      🌐 Dùng Proxy (xoay mỗi acc)
+      🌐 Dùng Proxy
     </label>
     <div class="btn-grid">
       <button class="big-btn btn-green-outline" onclick="startInstagram()">▶️ Bắt đầu</button>
@@ -430,57 +578,6 @@ socks5://192.168.1.3:1080"></textarea>
   </div>
 </div>
 
-<!-- REG PAGE PR5 -->
-<div class="panel" id="panel-regpagepr5">
-  <div class="card">
-    <h3>📄 Auto Reg Page PR5 (Profile Plus)</h3>
-    <p style="color:#8492a6; font-size:11.5px; margin-bottom:10px;">
-      Tạo Page chất lượng cao: Tạo Page → Kích hoạt Profile Plus → Set Category → Warm-up.
-    </p>
-    <div class="form-group">
-      <label>User Access Token</label>
-      <textarea id="pr5-token" placeholder="Dán token có quyền tạo Page..."></textarea>
-    </div>
-    <div class="grid-2">
-      <div class="form-group">
-        <label>Số lượng Page</label>
-        <input type="number" id="pr5-count" value="1" min="1" max="20">
-      </div>
-      <div class="form-group">
-        <label>Danh mục</label>
-        <select id="pr5-category">
-          <option value="Cá nhân">Cá nhân</option>
-          <option value="Công ty">Công ty</option>
-          <option value="Cửa hàng">Cửa hàng</option>
-          <option value="Nhà hàng">Nhà hàng</option>
-          <option value="Thương hiệu">Thương hiệu</option>
-          <option value="Blog">Blog</option>
-          <option value="Giải trí">Giải trí</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Tên Page (mỗi dòng 1 tên, để trống = random)</label>
-      <textarea id="pr5-names" style="min-height:80px;"
-        placeholder="Shop Quần Áo ABC
-Cà Phê Sài Gòn"></textarea>
-    </div>
-    <label class="proxy-toggle" id="pr5-proxy-toggle-label">
-      <input type="checkbox" id="pr5-use-proxy" onchange="toggleProxyUI('pr5')">
-      🌐 Dùng Proxy
-    </label>
-    <div class="btn-grid">
-      <button class="big-btn btn-green-outline" onclick="startRegPagePR5()">▶️ Bắt đầu</button>
-      <button class="big-btn btn-red-outline" onclick="stopAll()">⏹ Dừng</button>
-    </div>
-    <div style="margin-top:10px;"><span class="status-badge status-idle" id="pr5-status">💤 Chờ</span></div>
-  </div>
-  <div class="card">
-    <h3>📋 Log realtime</h3>
-    <div class="log-box" id="pr5-log"></div>
-  </div>
-</div>
-
 <!-- FB API -->
 <div class="panel" id="panel-fbapi">
   <div class="card">
@@ -491,7 +588,7 @@ Cà Phê Sài Gòn"></textarea>
     </div>
     <label class="proxy-toggle" id="api-proxy-toggle-label">
       <input type="checkbox" id="api-use-proxy" onchange="toggleProxyUI('api')">
-      🌐 Dùng Proxy cho tất cả API bên dưới
+      🌐 Dùng Proxy cho tất cả API
     </label>
     <button class="btn btn-cyan-solid" onclick="getFbInfo()">ℹ️ Lấy thông tin tài khoản</button>
     <div id="fbapi-info" style="margin-top:10px;color:#10b981;font-size:12px;"></div>
@@ -588,6 +685,26 @@ Cà Phê Sài Gòn"></textarea>
   </div>
 </div>
 
+<!-- PROXY GEN -->
+<div class="panel" id="panel-proxy">
+  <div class="card">
+    <h3>🌐 Proxy Generator</h3>
+    <div class="form-group">
+      <label>Số lượng</label>
+      <input type="number" id="px-limit" value="500" min="1" max="5000">
+    </div>
+    <div class="btn-grid">
+      <button class="big-btn btn-cyan" onclick="fetchProxies()">🔍 Lấy Proxy</button>
+      <button class="big-btn btn-gold" onclick="copyProxies()">📋 Copy all</button>
+    </div>
+    <div class="btn-grid" style="margin-top:8px;">
+      <button class="big-btn btn-green-outline btn-full" onclick="sendToProxyCtrl()">📤 Gửi sang Proxy Manager</button>
+    </div>
+    <div id="px-status" style="margin-top:10px;font-size:12px;color:#8492a6;"></div>
+    <div id="px-table" style="max-height: 400px; overflow-y: auto;"></div>
+  </div>
+</div>
+
 <!-- TOKEN PARSER -->
 <div class="panel" id="panel-gettoken">
   <div class="card">
@@ -604,12 +721,73 @@ Cà Phê Sài Gòn"></textarea>
 <div class="toast" id="toast"></div>
 
 <script>
+/* ═══════════════════════════════════════════════
+   GLOBAL STATE
+   ═══════════════════════════════════════════════ */
 let cpPages = [];
 let pxList = [];
 let startTime = 0;
 let timerInterval = null;
-let sessions = { cp: null, ig: null, fb: null, rp: null, lc: null, fm: null, pr5: null };
+let sessions = {
+  cp: null, ig: null, fb: null, rp: null, lc: null, fm: null,
+  pr5: null, acc: null
+};
+let navHistory = [];
+let currentTab = 'home';
+let accountsCache = [];
 
+/* ═══════════════════════════════════════════════
+   NAVIGATION - BACK BUTTON
+   ═══════════════════════════════════════════════ */
+function openTab(tab, pushHistory = true) {
+  if (pushHistory && currentTab !== tab) {
+    navHistory.push(currentTab);
+  }
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('panel-' + tab);
+  if (el) el.classList.add('active');
+  currentTab = tab;
+
+  // Update title
+  const titles = {
+    home: 'Trang chủ', accounts: 'Quản lý tài khoản', twofa: 'Sinh mã 2FA',
+    proxyctrl: 'Cấu hình Proxy', farm: 'Nuôi tài khoản',
+    logincheck: 'Check Cookie', regpagepr5: 'Reg Page PR5',
+    chuyenpage: 'Chuyển Page', instagram: 'Reg Instagram',
+    regfb: 'Reg Facebook', fbapi: 'Facebook API',
+    proxy: 'Proxy Generator', gettoken: 'Token Parser'
+  };
+  document.getElementById('topbar-title').textContent =
+    titles[tab] || 'NP09V3 - Multi Tool';
+
+  // Update menu active
+  document.querySelectorAll('.menu-btn').forEach(b => {
+    if (b.onclick && b.onclick.toString().includes(`'${tab}'`)) {
+      b.classList.add('active');
+    } else {
+      b.classList.remove('active');
+    }
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Auto load data
+  if (tab === 'accounts') loadAccounts();
+  if (tab === 'farm') loadFarmAccounts();
+}
+
+function goBack() {
+  if (navHistory.length > 0) {
+    const prev = navHistory.pop();
+    openTab(prev, false);
+  } else {
+    openTab('home', false);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   TOAST NOTIFICATION
+   ═══════════════════════════════════════════════ */
 function toast(msg, isError) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -617,29 +795,21 @@ function toast(msg, isError) {
   setTimeout(() => t.className = 'toast', 2500);
 }
 
-function openTab(tab) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  const el = document.getElementById('panel-' + tab);
-  if (el) el.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
+/* ═══════════════════════════════════════════════
+   PROXY TOGGLE UI
+   ═══════════════════════════════════════════════ */
 function toggleProxyUI(key) {
   const cb = document.getElementById(key + '-use-proxy');
   const label = document.getElementById(key + '-proxy-toggle-label');
-  if (!cb) {
-    const cb2 = document.getElementById(key.includes('scan') ? 'cp-use-proxy-scan' : key + '-use-proxy');
-    if (cb2) {
-      const lbl2 = document.getElementById(key.includes('scan') ? 'cp-proxy-toggle-label-scan' : key + '-proxy-toggle-label');
-      if (cb2.checked) lbl2.classList.add('on');
-      else lbl2.classList.remove('on');
-    }
-    return;
+  if (cb && label) {
+    if (cb.checked) label.classList.add('on');
+    else label.classList.remove('on');
   }
-  if (cb.checked) label.classList.add('on');
-  else label.classList.remove('on');
 }
 
+/* ═══════════════════════════════════════════════
+   TIMER
+   ═══════════════════════════════════════════════ */
 function startTimer() {
   startTime = Date.now();
   if (timerInterval) clearInterval(timerInterval);
@@ -659,33 +829,42 @@ function stopAll() {
     const el = document.getElementById(id);
     if (el) { el.className = 'status-badge status-idle'; el.textContent = '⏹ Dừng'; }
   });
+  toast('⏹ Đã dừng tất cả');
 }
 
+/* ═══════════════════════════════════════════════
+   LOG STREAM
+   ═══════════════════════════════════════════════ */
 function connectLogs(sessionId, logEl, statusEl, key) {
   const es = new EventSource('/api/logs/' + sessionId);
   es.onmessage = (e) => {
     const data = JSON.parse(e.data);
     if (data.status === 'closed') { es.close(); return; }
     if (data.status) {
-      const map = { 'running': 'status-running', 'done': 'status-done',
-                    'error': 'status-error', 'stopped': 'status-idle' };
-      statusEl.className = 'status-badge ' + (map[data.status] || 'status-idle');
-      statusEl.textContent = data.status === 'running' ? '⏳ Đang chạy' :
-        data.status === 'done' ? '✅ Xong' :
-        data.status === 'error' ? '❌ Lỗi' :
-        data.status === 'stopped' ? '⏹ Dừng' : '💤 Chờ';
+      const map = {'running': 'status-running', 'done': 'status-done',
+                   'error': 'status-error', 'stopped': 'status-idle'};
+      if (statusEl) {
+        statusEl.className = 'status-badge ' + (map[data.status] || 'status-idle');
+        statusEl.textContent = data.status === 'running' ? '⏳ Đang chạy' :
+          data.status === 'done' ? '✅ Xong' :
+          data.status === 'error' ? '❌ Lỗi' :
+          data.status === 'stopped' ? '⏹ Dừng' : '💤 Chờ';
+      }
     }
     if (data.msg) {
       const line = document.createElement('div');
       line.className = 'log-line';
-      line.innerHTML = `<span class="log-time">[${data.time}]</span><span class="log-msg">${data.msg}</span>`;
+      line.innerHTML = `<span class="log-time">[${data.time}]</span>` +
+                       `<span class="log-msg">${data.msg}</span>`;
       logEl.appendChild(line);
       logEl.scrollTop = logEl.scrollHeight;
-      if (data.msg.includes('✅') || data.msg.includes('LIVE') || data.msg.includes('THÀNH CÔNG')) {
+      if (data.msg.includes('✅') || data.msg.includes('LIVE')
+          || data.msg.includes('THÀNH CÔNG')) {
         const el = document.getElementById('stat-live');
         el.textContent = parseInt(el.textContent || 0) + 1;
       }
-      if (data.msg.includes('❌') || data.msg.includes('DIE') || data.msg.includes('THẤT BẠI')) {
+      if (data.msg.includes('❌') || data.msg.includes('DIE')
+          || data.msg.includes('THẤT BẠI')) {
         const el = document.getElementById('stat-error');
         el.textContent = parseInt(el.textContent || 0) + 1;
       }
@@ -694,6 +873,9 @@ function connectLogs(sessionId, logEl, statusEl, key) {
   es.onerror = () => es.close();
 }
 
+/* ═══════════════════════════════════════════════
+   PROXY BADGE
+   ═══════════════════════════════════════════════ */
 async function updateProxyBadge() {
   try {
     const r = await fetch('/api/proxy/status');
@@ -702,7 +884,9 @@ async function updateProxyBadge() {
   } catch (e) {}
 }
 
-/* PROXY CONTROL */
+/* ═══════════════════════════════════════════════
+   PROXY CONTROL
+   ═══════════════════════════════════════════════ */
 async function setProxyList() {
   const raw = document.getElementById('pc-list').value.trim();
   if (!raw) return toast('Dán proxy vào!', true);
@@ -759,45 +943,292 @@ async function testOneProxy() {
     : '<span style="color:#ef4444;">❌ DIE</span>';
 }
 
-/* PROXY GEN */
-async function fetchProxies() {
-  const limit = parseInt(document.getElementById('px-limit').value) || 500;
-  document.getElementById('px-status').textContent = '⏳ Đang lấy...';
-  const r = await fetch('/api/proxy/fetch', {
-    method: 'POST', headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({limit})
-  });
-  const d = await r.json();
-  if (d.success) {
-    pxList = d.proxies.map(p => p.url);
-    document.getElementById('px-status').innerHTML = `✅ <b>${d.total}</b> proxy`;
-    let html = `<table><thead><tr>
-      <th>#</th><th>IP</th><th>Port</th><th>Type</th><th>Status</th>
-    </tr></thead><tbody>`;
-    d.proxies.forEach((p, i) => {
-      html += `<tr class="page-row">
-        <td>${i+1}</td><td>${p.ip}</td><td>${p.port}</td><td>${p.type}</td>
-        <td><span style="color:#10b981;font-weight:800;">LIVE</span></td>
-      </tr>`;
+/* ═══════════════════════════════════════════════
+   QUẢN LÝ TÀI KHOẢN
+   ═══════════════════════════════════════════════ */
+async function addAccount() {
+  const platform = document.getElementById('acc-platform').value;
+  const cookie = document.getElementById('acc-cookie').value.trim();
+  const proxy = document.getElementById('acc-proxy').value.trim();
+  const secret_2fa = document.getElementById('acc-secret').value.trim();
+  const note = document.getElementById('acc-note').value.trim();
+
+  if (!cookie) return toast('Nhập cookie!', true);
+
+  const btn = document.getElementById('acc-add-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Đang thêm + check...';
+
+  try {
+    const r = await fetch('/api/accounts/add', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({platform, cookie, proxy, secret_2fa, note})
     });
-    html += '</tbody></table>';
-    document.getElementById('px-table').innerHTML = html;
+    const d = await r.json();
+    if (d.success) {
+      toast(`✅ Đã thêm: ${d.account.name || d.account.uid} [${d.account.status}]`);
+      document.getElementById('acc-cookie').value = '';
+      document.getElementById('acc-proxy').value = '';
+      document.getElementById('acc-secret').value = '';
+      document.getElementById('acc-note').value = '';
+      loadAccounts();
+    } else {
+      toast(d.error || 'Lỗi', true);
+    }
+  } catch (e) { toast('Lỗi: ' + e.message, true); }
+  finally {
+    btn.disabled = false;
+    btn.textContent = '➕ Thêm tài khoản';
   }
 }
 
-function copyProxies() {
-  if (pxList.length === 0) return toast('Chưa có proxy!', true);
-  navigator.clipboard.writeText(pxList.join('\n')).then(() => toast(`✅ Copy ${pxList.length}!`));
+async function loadAccounts() {
+  const el = document.getElementById('acc-list');
+  el.innerHTML = '⏳ Đang tải...';
+  try {
+    const r = await fetch('/api/accounts/list');
+    const d = await r.json();
+    if (!d.success || !d.accounts || d.accounts.length === 0) {
+      el.innerHTML = '<p style="color:#8492a6;">Chưa có tài khoản nào.</p>';
+      document.getElementById('acc-count').textContent = '0';
+      accountsCache = [];
+      return;
+    }
+    accountsCache = d.accounts;
+    document.getElementById('acc-count').textContent = d.accounts.length;
+
+    let html = '<table><thead><tr><th>#</th><th>Platform</th><th>UID</th>'
+      + '<th>Tên</th><th>Status</th><th>Proxy</th><th>Thao tác</th></tr></thead><tbody>';
+    d.accounts.forEach((a, i) => {
+      const color = a.status === 'LIVE' ? '#10b981' : '#ef4444';
+      const ico = a.platform === 'facebook' ? '📘' : '📷';
+      const secretBadge = a.secret_2fa ? ' 🔐' : '';
+      const safeName = (a.name || '').replace(/'/g, "\\'");
+      html += `<tr class="page-row">
+        <td>${i+1}</td>
+        <td>${ico}</td>
+        <td>${a.uid || ''}</td>
+        <td>${a.name || ''}${secretBadge}</td>
+        <td><span style="color:${color};font-weight:800;">${a.status}</span></td>
+        <td style="font-size:10px;">${a.proxy || '-'}</td>
+        <td>
+          <button class="btn btn-cyan-solid" style="padding:4px 8px;font-size:11px;"
+            onclick="recheckAcc('${a.id}')">🔄</button>
+          <button class="btn btn-red-outline" style="padding:4px 8px;font-size:11px;"
+            onclick="deleteAcc('${a.id}', '${safeName}')">🗑️</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  } catch (e) { el.innerHTML = '❌ Lỗi: ' + e.message; }
 }
 
-function sendToProxyCtrl() {
-  if (pxList.length === 0) return toast('Chưa có proxy!', true);
-  document.getElementById('pc-list').value = pxList.join('\n');
-  openTab('proxyctrl');
-  setProxyList();
+async function deleteAcc(id, name) {
+  if (!confirm(`Xóa acc "${name}"?`)) return;
+  const r = await fetch('/api/accounts/delete', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({id})
+  });
+  const d = await r.json();
+  if (d.success) { toast('Đã xóa'); loadAccounts(); }
+  else toast('Lỗi xóa', true);
 }
 
-/* CHECK COOKIE */
+async function recheckAcc(id) {
+  toast('Đang check...');
+  const r = await fetch('/api/accounts/check/' + id, {method: 'POST'});
+  const d = await r.json();
+  if (d.success) {
+    toast(`✅ ${d.account.name}: ${d.account.status}`);
+    loadAccounts();
+  } else toast(d.error || 'Lỗi', true);
+}
+
+async function checkAllAccounts() {
+  document.getElementById('acc-log').innerHTML = '';
+  const r = await fetch('/api/accounts/check-all', {method: 'POST'});
+  const d = await r.json();
+  if (d.success) {
+    sessions.acc = d.session_id;
+    connectLogs(d.session_id, document.getElementById('acc-log'), null, 'acc');
+    setTimeout(loadAccounts, 8000);
+  } else toast(d.error || 'Lỗi', true);
+}
+
+/* ═══════════════════════════════════════════════
+   SINH 2FA
+   ═══════════════════════════════════════════════ */
+let tfaInterval = null;
+
+async function gen2FA() {
+  const secret = document.getElementById('tfa-secret').value.trim();
+  if (!secret) return toast('Nhập secret!', true);
+
+  if (tfaInterval) { clearInterval(tfaInterval); tfaInterval = null; }
+
+  const fetch2FA = async () => {
+    try {
+      const r = await fetch('/api/2fa/generate', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({secret})
+      });
+      const d = await r.json();
+      if (d.success) {
+        document.getElementById('tfa-code').textContent =
+          d.code.slice(0, 3) + ' ' + d.code.slice(3);
+        document.getElementById('tfa-time').textContent =
+          `Còn ${d.remaining}s (đổi sau ${d.period}s)`;
+      } else {
+        document.getElementById('tfa-code').textContent = 'LỖI';
+        document.getElementById('tfa-time').textContent = d.error;
+        if (tfaInterval) { clearInterval(tfaInterval); tfaInterval = null; }
+      }
+    } catch (e) {
+      document.getElementById('tfa-code').textContent = 'LỖI';
+      document.getElementById('tfa-time').textContent = e.message;
+    }
+  };
+
+  await fetch2FA();
+  tfaInterval = setInterval(fetch2FA, 1000);
+}
+
+function copy2FA() {
+  const code = document.getElementById('tfa-code').textContent.replace(/\s/g, '');
+  if (code === '------' || code === 'LỖI') return toast('Chưa có mã', true);
+  navigator.clipboard.writeText(code).then(() => toast('✅ Đã copy mã 2FA!'));
+}
+
+async function genAll2FA() {
+  const el = document.getElementById('tfa-list');
+  el.innerHTML = '⏳ Đang sinh...';
+  const r = await fetch('/api/2fa/generate-batch', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({})
+  });
+  const d = await r.json();
+  if (!d.success || !d.results || d.results.length === 0) {
+    el.innerHTML = '<p style="color:#8492a6;">Không có acc nào có secret 2FA.</p>';
+    return;
+  }
+  let html = '<table><thead><tr><th>#</th><th>Platform</th>'
+    + '<th>Tên</th><th>Mã 2FA</th></tr></thead><tbody>';
+  d.results.forEach((r, i) => {
+    const ico = r.platform === 'facebook' ? '📘' : '📷';
+    html += `<tr class="page-row">
+      <td>${i+1}</td>
+      <td>${ico}</td>
+      <td>${r.name || ''}</td>
+      <td><span style="font-size:20px; font-weight:900; color:#10b981;
+        font-family:Consolas,monospace; letter-spacing:4px;">${r.code}</span></td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════════
+   NUÔI ACC (ĐA LUỒNG)
+   ═══════════════════════════════════════════════ */
+async function loadFarmAccounts() {
+  const platform = document.getElementById('fm-platform').value;
+  const el = document.getElementById('fm-acc-list');
+  el.innerHTML = '⏳ Đang tải...';
+
+  try {
+    const r = await fetch('/api/accounts/list');
+    const d = await r.json();
+    if (!d.success || !d.accounts) {
+      el.innerHTML = '<span style="color:#8492a6;">Không tải được acc.</span>';
+      return;
+    }
+    const filtered = d.accounts.filter(a => a.platform === platform);
+    if (filtered.length === 0) {
+      el.innerHTML = `<span style="color:#8492a6;font-size:12px;">
+        Không có acc ${platform.toUpperCase()} nào. Vào tab Tài khoản để thêm.</span>`;
+      return;
+    }
+    let html = '';
+    filtered.forEach((a, i) => {
+      const color = a.status === 'LIVE' ? '#10b981' : '#ef4444';
+      html += `<div class="farm-acc-row">
+        <input type="checkbox" class="farm-acc-cb" data-id="${a.id}"
+          data-cookie='${a.cookie.replace(/'/g, "&#39;")}'
+          data-proxy="${a.proxy || ''}">
+        <div>
+          <b>${a.name || a.uid}</b>
+          <span style="color:${color};font-weight:800;font-size:11px;">
+            [${a.status}]</span>
+          <div style="font-size:10px;color:#5c6b84;">
+            UID: ${a.uid} | Proxy: ${a.proxy || 'không'}
+          </div>
+        </div>
+      </div>`;
+    });
+    el.innerHTML = html;
+    toast(`✅ Tải ${filtered.length} acc`);
+  } catch (e) {
+    el.innerHTML = '❌ Lỗi: ' + e.message;
+  }
+}
+
+async function startFarm() {
+  const platform = document.getElementById('fm-platform').value;
+  const duration = parseInt(document.getElementById('fm-duration').value) || 5;
+  const rate = parseInt(document.getElementById('fm-rate').value) || 3;
+  const delayMin = parseInt(document.getElementById('fm-delay-min').value) || 5;
+  const delayMax = parseInt(document.getElementById('fm-delay-max').value) || 15;
+  const workers = parseInt(document.getElementById('fm-workers').value) || 5;
+  const use_proxy = document.getElementById('fm-use-proxy').checked;
+
+  // Lấy acc từ checkbox
+  const checkedBoxes = document.querySelectorAll('.farm-acc-cb:checked');
+  let accounts = [];
+  checkedBoxes.forEach(cb => {
+    accounts.push({
+      cookie: cb.dataset.cookie,
+      proxy: cb.dataset.proxy || ''
+    });
+  });
+
+  // Nếu không chọn từ list, dùng manual paste
+  if (accounts.length === 0) {
+    const manual = document.getElementById('fm-cookie-manual').value.trim();
+    if (manual) {
+      manual.split('\n').forEach(line => {
+        line = line.trim();
+        if (line) accounts.push({cookie: line, proxy: ''});
+      });
+    }
+  }
+
+  if (accounts.length === 0) {
+    return toast('Chọn ít nhất 1 acc hoặc paste cookie!', true);
+  }
+
+  document.getElementById('fm-log').innerHTML = '';
+  startTimer();
+
+  const r = await fetch('/api/farm/start-multi', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      platform, duration, actions_per_min: rate,
+      delay_min: delayMin, delay_max: delayMax,
+      max_workers: workers, use_proxy, accounts
+    })
+  });
+  const d = await r.json();
+  if (d.success) {
+    sessions.fm = d.session_id;
+    connectLogs(d.session_id, document.getElementById('fm-log'),
+                document.getElementById('fm-status'), 'fm');
+  } else toast(d.error || 'Lỗi', true);
+}
+
+/* ═══════════════════════════════════════════════
+   CHECK COOKIE
+   ═══════════════════════════════════════════════ */
 async function startCookieCheck() {
   const platform = document.getElementById('lc-platform').value;
   const raw = document.getElementById('lc-cookies').value.trim();
@@ -821,7 +1252,8 @@ async function startCookieCheck() {
         const res = await fetch('/api/login/results/' + d.session_id);
         const data = await res.json();
         if (data.results && data.results.length > 0) {
-          let html = '<table><thead><tr><th>#</th><th>Status</th><th>UID</th><th>Tên</th></tr></thead><tbody>';
+          let html = '<table><thead><tr><th>#</th><th>Status</th>'
+            + '<th>UID</th><th>Tên</th></tr></thead><tbody>';
           data.results.forEach((item, i) => {
             const color = item.status === 'LIVE' ? '#10b981' : '#ef4444';
             html += `<tr class="page-row">
@@ -841,30 +1273,34 @@ async function startCookieCheck() {
   }
 }
 
-/* NUÔI ACC */
-async function startFarm() {
-  const platform = document.getElementById('fm-platform').value;
-  const cookie = document.getElementById('fm-cookie').value.trim();
-  const duration = parseInt(document.getElementById('fm-duration').value) || 5;
-  const rate = parseInt(document.getElementById('fm-rate').value) || 3;
-  const use_proxy = document.getElementById('fm-use-proxy').checked;
-  if (!cookie) return toast('Nhập cookie!', true);
-  document.getElementById('fm-log').innerHTML = '';
+/* ═══════════════════════════════════════════════
+   REG PAGE PR5
+   ═══════════════════════════════════════════════ */
+async function startRegPagePR5() {
+  const token = document.getElementById('pr5-token').value.trim();
+  const count = parseInt(document.getElementById('pr5-count').value) || 1;
+  const category = document.getElementById('pr5-category').value;
+  const use_proxy = document.getElementById('pr5-use-proxy').checked;
+  const namesRaw = document.getElementById('pr5-names').value.trim();
+  const names = namesRaw ? namesRaw.split('\n').map(l => l.trim()).filter(l => l) : [];
+  if (!token) return toast('Nhập token!', true);
+  document.getElementById('pr5-log').innerHTML = '';
   startTimer();
-  const r = await fetch('/api/farm/start', {
+  const r = await fetch('/api/fb/regpagepr5', {
     method: 'POST', headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({platform, cookie, duration,
-                          actions_per_min: rate, use_proxy})
+    body: JSON.stringify({token, count, category, use_proxy, names})
   });
   const d = await r.json();
   if (d.success) {
-    sessions.fm = d.session_id;
-    connectLogs(d.session_id, document.getElementById('fm-log'),
-                document.getElementById('fm-status'), 'fm');
+    sessions.pr5 = d.session_id;
+    connectLogs(d.session_id, document.getElementById('pr5-log'),
+                document.getElementById('pr5-status'), 'pr5');
   }
 }
 
-/* CHUYỂN PAGE */
+/* ═══════════════════════════════════════════════
+   CHUYỂN PAGE
+   ═══════════════════════════════════════════════ */
 async function scanPages(btn) {
   const token = document.getElementById('cp-source-token').value.trim();
   const use_proxy = document.getElementById('cp-use-proxy-scan').checked;
@@ -915,7 +1351,8 @@ function toggleAll(cb) {
 }
 
 async function startTransfer() {
-  const selected = Array.from(document.querySelectorAll('.cp-page-cb:checked')).map(c => c.dataset.uid);
+  const selected = Array.from(document.querySelectorAll('.cp-page-cb:checked'))
+    .map(c => c.dataset.uid);
   if (selected.length === 0) return toast('Chọn page!', true);
   const source_token = document.getElementById('cp-source-token').value.trim();
   const source_password = document.getElementById('cp-source-pwd').value.trim();
@@ -938,7 +1375,9 @@ async function startTransfer() {
   }
 }
 
-/* INSTAGRAM */
+/* ═══════════════════════════════════════════════
+   REG INSTAGRAM
+   ═══════════════════════════════════════════════ */
 async function startInstagram() {
   const num = parseInt(document.getElementById('ig-num').value) || 1;
   const pwd = document.getElementById('ig-pwd').value.trim();
@@ -958,7 +1397,9 @@ async function startInstagram() {
   }
 }
 
-/* REG FB */
+/* ═══════════════════════════════════════════════
+   REG FACEBOOK
+   ═══════════════════════════════════════════════ */
 async function startRegFB() {
   const num = parseInt(document.getElementById('fb-num').value) || 1;
   const pwd = document.getElementById('fb-pwd').value.trim();
@@ -977,30 +1418,9 @@ async function startRegFB() {
   }
 }
 
-/* REG PAGE PR5 */
-async function startRegPagePR5() {
-  const token = document.getElementById('pr5-token').value.trim();
-  const count = parseInt(document.getElementById('pr5-count').value) || 1;
-  const category = document.getElementById('pr5-category').value;
-  const use_proxy = document.getElementById('pr5-use-proxy').checked;
-  const namesRaw = document.getElementById('pr5-names').value.trim();
-  const names = namesRaw ? namesRaw.split('\n').map(l => l.trim()).filter(l => l) : [];
-  if (!token) return toast('Nhập token!', true);
-  document.getElementById('pr5-log').innerHTML = '';
-  startTimer();
-  const r = await fetch('/api/fb/regpagepr5', {
-    method: 'POST', headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({token, count, category, use_proxy, names})
-  });
-  const d = await r.json();
-  if (d.success) {
-    sessions.pr5 = d.session_id;
-    connectLogs(d.session_id, document.getElementById('pr5-log'),
-                document.getElementById('pr5-status'), 'pr5');
-  }
-}
-
-/* FB API */
+/* ═══════════════════════════════════════════════
+   FB API
+   ═══════════════════════════════════════════════ */
 function getToken() {
   return document.getElementById('fbapi-token').value.trim();
 }
@@ -1026,7 +1446,8 @@ async function getFbInfo() {
     document.getElementById('user-chip').textContent = '👤 ' + d.info.name;
     document.getElementById('fbapi-info').innerHTML =
       `✅ <b>${d.info.name}</b> (UID: ${d.info.id})` +
-      (d.info.avatar_url ? `<br><img src="${d.info.avatar_url}" style="width:60px;border-radius:50%;margin-top:6px;">` : '');
+      (d.info.avatar_url ?
+        `<br><img src="${d.info.avatar_url}" style="width:60px;border-radius:50%;margin-top:6px;">` : '');
   } else {
     document.getElementById('fbapi-info').textContent = '❌ ' + d.error;
   }
@@ -1093,7 +1514,7 @@ async function doShare() {
   const d = await callFbApi('share', {post_id});
   if (!d) return;
   document.getElementById('sh-result').innerHTML = d.success
-    ? `<span style="color:#10b981;">✅ OK</span>`
+    ? '<span style="color:#10b981;">✅ OK</span>'
     : `<span style="color:#ef4444;">❌ ${d.error}</span>`;
 }
 
@@ -1117,7 +1538,50 @@ async function upCover() {
     : `<span style="color:#ef4444;">❌ ${d.error}</span>`;
 }
 
-/* TOKEN PARSER */
+/* ═══════════════════════════════════════════════
+   PROXY GEN
+   ═══════════════════════════════════════════════ */
+async function fetchProxies() {
+  const limit = parseInt(document.getElementById('px-limit').value) || 500;
+  document.getElementById('px-status').textContent = '⏳ Đang lấy...';
+  const r = await fetch('/api/proxy/fetch', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({limit})
+  });
+  const d = await r.json();
+  if (d.success) {
+    pxList = d.proxies.map(p => p.url);
+    document.getElementById('px-status').innerHTML = `✅ <b>${d.total}</b> proxy`;
+    let html = `<table><thead><tr>
+      <th>#</th><th>IP</th><th>Port</th><th>Type</th><th>Status</th>
+    </tr></thead><tbody>`;
+    d.proxies.forEach((p, i) => {
+      html += `<tr class="page-row">
+        <td>${i+1}</td><td>${p.ip}</td><td>${p.port}</td><td>${p.type}</td>
+        <td><span style="color:#10b981;font-weight:800;">LIVE</span></td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('px-table').innerHTML = html;
+  }
+}
+
+function copyProxies() {
+  if (pxList.length === 0) return toast('Chưa có proxy!', true);
+  navigator.clipboard.writeText(pxList.join('\n'))
+    .then(() => toast(`✅ Copy ${pxList.length}!`));
+}
+
+function sendToProxyCtrl() {
+  if (pxList.length === 0) return toast('Chưa có proxy!', true);
+  document.getElementById('pc-list').value = pxList.join('\n');
+  openTab('proxyctrl');
+  setProxyList();
+}
+
+/* ═══════════════════════════════════════════════
+   TOKEN PARSER
+   ═══════════════════════════════════════════════ */
 async function parseToken() {
   const raw = document.getElementById('tk-raw').value;
   if (!raw.trim()) return toast('Dán dữ liệu!', true);
@@ -1145,9 +1609,13 @@ async function parseToken() {
   toast(`✅ ${res.tokens.length} token`);
 }
 
+/* ═══════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════ */
 fetch('/health').then(r => r.json()).then(d => {
   document.getElementById('io-status').textContent =
-    '✅ Server online - ' + new Date(d.time).toLocaleTimeString('vi-VN');
+    '✅ Server online - ' + new Date(d.time).toLocaleTimeString('vi-VN') +
+    (d.has_pyotp ? ' | 2FA OK' : ' | ⚠️ Thiếu pyotp');
   updateProxyBadge();
 }).catch(() => {
   document.getElementById('io-status').textContent = '❌ Server offline';
