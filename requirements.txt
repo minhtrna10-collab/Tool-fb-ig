@@ -3,3 +3,5 @@ requests
 gunicorn
 beautifulsoup4
 colorama
+pyotp
+curl_cffi
