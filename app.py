@@ -1,7 +1,7 @@
 """
-VNDEVCODE MULTI TOOL WEB - BACKEND ALL-IN-ONE v2
-Bao gồm: Chuyển Page, Reg IG, Reg FB iOS, 10 FB API, Auto Reg Page PR5,
-Check Cookie Live/Die, Nuôi Acc, Auto Proxy, Proxy Gen, Token Parser
+VNDEVCODE MULTI TOOL WEB - BACKEND FULL
+Chức năng: Chuyển Page, Reg IG, Reg FB iOS, 10 FB API, Auto Reg Page PR5,
+Check Cookie Live/Die, Nuôi Acc, Auto Proxy Manager, Proxy Gen, Token Parser
 """
 import os
 import json
@@ -108,7 +108,6 @@ APP_ID_PAGE_CREATE = "com.bloks.www.additional.profile.plus.creation.action.cate
 APP_ID_PROFILE_PLUS = "com.bloks.www.bloks.caa.profile_plus.creation.async"
 GRAPHQL_DOC_PAGE_CREATE = "119940804239956818821550724"
 GRAPHQL_DOC_PROFILE_PLUS = "11994080423986492941384902285"
-DEFAULT_CATEGORY = "180164648685982"
 
 PAGE_CATEGORIES = {
     "Cá nhân": "180164648685982",
@@ -137,6 +136,7 @@ class VNNameGenerator:
         return (f"{random.choice(VNNameGenerator.VN_HO)} "
                 f"{random.choice(VNNameGenerator.VN_LOT)} "
                 f"{random.choice(VNNameGenerator.VN_TEN)}")
+
 
 # ═══════════════════════════════════════════════════════════
 # MODULE: CHUYỂN PAGE
@@ -352,8 +352,10 @@ class ChuyenPageTool:
         if r2.get("errors"):
             return False, f"Lỗi accept server: {r2['errors']}"
         return True, "OK"
-        # ═══════════════════════════════════════════════════════════
-# MODULE: TEMP EMAIL
+
+
+# ═══════════════════════════════════════════════════════════
+# TEMP EMAIL
 # ═══════════════════════════════════════════════════════════
 class TempEmailGenerator:
     def __init__(self, use_proxy=False):
@@ -474,7 +476,7 @@ class TempEmailGenerator:
 
 
 # ═══════════════════════════════════════════════════════════
-# MODULE: INSTAGRAM REG
+# INSTAGRAM REG
 # ═══════════════════════════════════════════════════════════
 class InstagramReg:
     def __init__(self, use_proxy=False):
@@ -652,7 +654,7 @@ class InstagramReg:
 
 
 # ═══════════════════════════════════════════════════════════
-# MODULE: FACEBOOK iOS REG
+# FACEBOOK iOS REG
 # ═══════════════════════════════════════════════════════════
 class FacebookIOSReg:
     def __init__(self, use_proxy=False):
@@ -712,7 +714,7 @@ class FacebookIOSReg:
 
 
 # ═══════════════════════════════════════════════════════════
-# MODULE: COOKIE LOGIN CHECKER
+# COOKIE LOGIN CHECKER
 # ═══════════════════════════════════════════════════════════
 class CookieLoginChecker:
     def __init__(self, platform='facebook', use_proxy=False):
@@ -809,7 +811,6 @@ class CookieLoginChecker:
                             'username': user.get('username', ''),
                             'name': user.get('full_name', ''),
                             'avatar': user.get('profile_pic_url_hd', ''),
-                            'followers': user.get('edge_followed_by', {}).get('count', 0),
                             'status': 'LIVE', 'platform': 'instagram'}
                 except Exception:
                     pass
@@ -827,7 +828,7 @@ class CookieLoginChecker:
 
 
 # ═══════════════════════════════════════════════════════════
-# MODULE: NUÔI TÀI KHOẢN
+# NUÔI TÀI KHOẢN
 # ═══════════════════════════════════════════════════════════
 class AccountFarmer:
     FB_TARGETS = ['4', '5', '6', '8', '9', '10', '11', '12']
@@ -1087,8 +1088,10 @@ class AccountFarmer:
             self.log(f"🎉 Xong! {action_count} hành động")
         except Exception as e:
             self.log(f"❌ {e}")
-            # ═══════════════════════════════════════════════════════════
-# MODULE: AUTO REG PAGE PR5 (PROFILE PLUS)
+
+
+# ═══════════════════════════════════════════════════════════
+# AUTO REG PAGE PR5
 # ═══════════════════════════════════════════════════════════
 class FBPageAutoRegPR5:
     def __init__(self, use_proxy=False):
@@ -2216,9 +2219,7 @@ def api_stop(sid):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print("=" * 60)
-    print("  🚀 VNDEVCODE MULTI TOOL WEB - FULL v2")
+    print("  🚀 VNDEVCODE MULTI TOOL WEB - FULL")
     print(f"  🌐 http://localhost:{port}")
     print("=" * 60)
     app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
-            
-            
